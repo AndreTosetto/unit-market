@@ -1,0 +1,30 @@
+{
+	"name": "dstblOriginal",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_srv_bi_market_star",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "nome",
+				"type": "varchar"
+			},
+			{
+				"name": "descricao",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "original"
+		}
+	}
+}
