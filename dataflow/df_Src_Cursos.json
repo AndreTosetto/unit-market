@@ -1,0 +1,59 @@
+{
+	"name": "df_Src_Cursos",
+	"properties": {
+		"folder": {
+			"name": "2 - Stage"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_Ext_Silver_Cursos_Destino",
+						"type": "DatasetReference"
+					},
+					"name": "dlSilverCurso"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_tbl_src_Cursos",
+						"type": "DatasetReference"
+					},
+					"name": "srcDestino"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          Cod as string,",
+				"          {Nome Novo} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> dlSilverCurso",
+				"dlSilverCurso sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Id as integer,",
+				"          BK as string,",
+				"          Nome as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          BK = Cod,",
+				"          Nome = {Nome Novo}",
+				"     )) ~> srcDestino"
+			]
+		}
+	}
+}
