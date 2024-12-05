@@ -1130,6 +1130,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "StageNew"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_tbl_stg_Afiliados",
+								"type": "DatasetReference"
+							},
+							"name": "StageUpdate"
 						}
 					],
 					"transformations": [
@@ -1155,7 +1162,7 @@
 							"name": "dataIni"
 						},
 						{
-							"name": "split1"
+							"name": "NovosRegistros"
 						}
 					],
 					"scriptLines": [
@@ -1203,8 +1210,9 @@
 						"     broadcast: 'auto')~> LeftJoin",
 						"LeftJoin derive(DataStartEnd = currentDate()) ~> dataIni",
 						"dataIni split(isNull(BK_STG),",
-						"     disjoint: false) ~> split1@(NovosRegistros)",
-						"split1@NovosRegistros sink(allowSchemaDrift: true,",
+						"     Id_SRC == BK_STG && (Nome_SRC != Nome_STG),",
+						"     disjoint: false) ~> NovosRegistros@(NovosRegistros, Update)",
+						"NovosRegistros@NovosRegistros sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
 						"          Id as integer,",
@@ -1225,7 +1233,29 @@
 						"          BK = Id_SRC,",
 						"          Nome = Nome_SRC,",
 						"          DataInicio = DataStartEnd",
-						"     )) ~> StageNew"
+						"     )) ~> StageNew",
+						"NovosRegistros@Update sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Id as integer,",
+						"          BK as integer,",
+						"          Nome as string,",
+						"          DataInicio as date,",
+						"          DataFim as date",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          BK = Id_SRC,",
+						"          Nome = Nome_SRC,",
+						"          DataInicio = DataStartEnd",
+						"     )) ~> StageUpdate"
 					]
 				}
 			},
