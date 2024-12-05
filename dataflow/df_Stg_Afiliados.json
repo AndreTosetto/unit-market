@@ -117,7 +117,7 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> LeftJoin",
-				"LeftJoin derive(DataStartEnd = currentDate()+1) ~> dataIni",
+				"LeftJoin derive(DataStartEnd = currentDate()) ~> dataIni",
 				"dataIni split(isNull(BK_STG),",
 				"     Id_SRC == BK_STG && (Nome_SRC != Nome_STG),",
 				"     Id_SRC == BK_STG && (Nome_SRC != Nome_STG),",
