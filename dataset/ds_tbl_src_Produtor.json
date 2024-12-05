@@ -1,5 +1,5 @@
 {
-	"name": "ds_tbl_src_Afiliados",
+	"name": "ds_tbl_src_Produtor",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "srv_bi_market_star",
@@ -23,7 +23,7 @@
 		],
 		"typeProperties": {
 			"schema": "src",
-			"table": "Afiliados"
+			"table": "Produtor"
 		}
 	}
 }

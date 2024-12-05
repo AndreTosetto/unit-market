@@ -1,5 +1,5 @@
 {
-	"name": "ds_tbl_src_Afiliados",
+	"name": "ds_tbl_src_Cursos",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "srv_bi_market_star",
@@ -17,13 +17,17 @@
 				"precision": 10
 			},
 			{
+				"name": "BK",
+				"type": "varchar"
+			},
+			{
 				"name": "Nome",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "src",
-			"table": "Afiliados"
+			"table": "Cursos"
 		}
 	}
 }
