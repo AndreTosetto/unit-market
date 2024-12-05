@@ -11,9 +11,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'datalakemktStart'"
 		},
+		"srv_bi_market_star_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'srv_bi_market_star'"
+		},
 		"datalakemktStart_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://samarketstarunit.dfs.core.windows.net/"
+		},
+		"srv_bi_market_star_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "srv-unit-market-star.database.windows.net"
+		},
+		"srv_bi_market_star_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db-bi-market-star"
+		},
+		"srv_bi_market_star_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminsql"
 		},
 		"containerUri": {
 			"type": "string",
@@ -45,8 +61,20 @@
 					"datalakemktStart_accountKey": {
 						"value": "[parameters('datalakemktStart_accountKey')]"
 					},
+					"srv_bi_market_star_password": {
+						"value": "[parameters('srv_bi_market_star_password')]"
+					},
 					"datalakemktStart_properties_typeProperties_url": {
 						"value": "[parameters('datalakemktStart_properties_typeProperties_url')]"
+					},
+					"srv_bi_market_star_properties_typeProperties_server": {
+						"value": "[parameters('srv_bi_market_star_properties_typeProperties_server')]"
+					},
+					"srv_bi_market_star_properties_typeProperties_database": {
+						"value": "[parameters('srv_bi_market_star_properties_typeProperties_database')]"
+					},
+					"srv_bi_market_star_properties_typeProperties_userName": {
+						"value": "[parameters('srv_bi_market_star_properties_typeProperties_userName')]"
 					}
 				}
 			},

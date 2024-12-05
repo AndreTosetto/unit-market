@@ -8,8 +8,20 @@
 		"datalakemktStart_accountKey": {
 			"value": ""
 		},
+		"srv_bi_market_star_password": {
+			"value": ""
+		},
 		"datalakemktStart_properties_typeProperties_url": {
 			"value": "https://samarketstarunit.dfs.core.windows.net/"
+		},
+		"srv_bi_market_star_properties_typeProperties_server": {
+			"value": "srv-unit-market-star.database.windows.net"
+		},
+		"srv_bi_market_star_properties_typeProperties_database": {
+			"value": "db-bi-market-star"
+		},
+		"srv_bi_market_star_properties_typeProperties_userName": {
+			"value": "adminsql"
 		}
 	}
 }

@@ -11,9 +11,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'datalakemktStart'"
 		},
+		"srv_bi_market_star_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'srv_bi_market_star'"
+		},
 		"datalakemktStart_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://samarketstarunit.dfs.core.windows.net/"
+		},
+		"srv_bi_market_star_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "srv-unit-market-star.database.windows.net"
+		},
+		"srv_bi_market_star_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db-bi-market-star"
+		},
+		"srv_bi_market_star_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminsql"
 		}
 	},
 	"variables": {
@@ -786,6 +802,40 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/tbl_src_Afiliados')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "srv_bi_market_star",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "2 - Stage"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Nome",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "src",
+					"table": "Afiliados"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/srv_bi_market_star')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/datalakemktStart')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -797,6 +847,29 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('datalakemktStart_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/srv_bi_market_star')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Servidor Sql Market Star",
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('srv_bi_market_star_properties_typeProperties_server')]",
+					"database": "[parameters('srv_bi_market_star_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('srv_bi_market_star_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('srv_bi_market_star_password')]"
 					}
 				}
 			},
