@@ -1,0 +1,1110 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "dfBImktstar-devT"
+		},
+		"datalakemktStart_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'datalakemktStart'"
+		},
+		"datalakemktStart_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://samarketstarunit.dfs.core.windows.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/datalakemktStart')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('datalakemktStart_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('datalakemktStart_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Bronze_Cursos_Entrada')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Cod-Produtos.csv",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ";",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Cod;Nome Novo",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Bronze_MacroRegioes_Entrada')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Planilha1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Macro Regioes.xlsx",
+						"fileSystem": "bronze"
+					}
+				},
+				"schema": [
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Bronze_VendasHotmart_Entrada')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "vendasHotmartsaida.csv",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Produto",
+						"type": "String"
+					},
+					{
+						"name": "Afiliado",
+						"type": "String"
+					},
+					{
+						"name": "Nome do Produtor",
+						"type": "String"
+					},
+					{
+						"name": "Documento do Produtor",
+						"type": "String"
+					},
+					{
+						"name": "Meio de Pagamento",
+						"type": "String"
+					},
+					{
+						"name": "Preço do Produto",
+						"type": "String"
+					},
+					{
+						"name": "Preço da Oferta",
+						"type": "String"
+					},
+					{
+						"name": "Tipo de Pagamento",
+						"type": "String"
+					},
+					{
+						"name": "Tipo pagamento oferta",
+						"type": "String"
+					},
+					{
+						"name": "Moeda",
+						"type": "String"
+					},
+					{
+						"name": "Número da Parcela",
+						"type": "String"
+					},
+					{
+						"name": "Recorrência",
+						"type": "String"
+					},
+					{
+						"name": "Data de Venda",
+						"type": "String"
+					},
+					{
+						"name": "Data de Confirmação",
+						"type": "String"
+					},
+					{
+						"name": "Status",
+						"type": "String"
+					},
+					{
+						"name": "DDD",
+						"type": "String"
+					},
+					{
+						"name": "Cidade",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Silver_Afiliados_Destino')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Afiliados.csv",
+						"fileSystem": "prata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Silver_Cursos_Destino')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Cursos.csv",
+						"fileSystem": "prata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Afiliado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Silver_MacroRegioes_Destino')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "regioes.csv",
+						"fileSystem": "prata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Afiliado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Silver_Produtor_Destino')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "produtor.csv",
+						"fileSystem": "prata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Afiliado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Silver_Status_Destino')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Status.csv",
+						"fileSystem": "prata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Afiliado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Silver_VendasHotMart_Destino')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "vendas.csv",
+						"fileSystem": "prata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Afiliado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Ext_Silver_tipodePagamento_Destino')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Tipo_de_Pagamento.csv",
+						"fileSystem": "prata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Afiliado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Ext_Afliados')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Bronze_VendasHotmart_Entrada",
+								"type": "DatasetReference"
+							},
+							"name": "Vendas"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_Afiliados_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "AfiliadoSilver"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelecionarColuna"
+						},
+						{
+							"name": "AgregAux"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Produto as string,",
+						"          Afiliado as string,",
+						"          {Nome do Produtor} as string,",
+						"          {Documento do Produtor} as string,",
+						"          {Meio de Pagamento} as string,",
+						"          {Preço do Produto} as string,",
+						"          {Preço da Oferta} as string,",
+						"          {Tipo de Pagamento} as string,",
+						"          {Tipo pagamento oferta} as string,",
+						"          Moeda as string,",
+						"          {Número da Parcela} as string,",
+						"          {Recorrência} as string,",
+						"          {Data de Venda} as string,",
+						"          {Data de Confirmação} as string,",
+						"          Status as string,",
+						"          DDD as string,",
+						"          Cidade as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Vendas",
+						"Vendas select(mapColumn(",
+						"          Afiliado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelecionarColuna",
+						"SelecionarColuna aggregate(groupBy(Afiliado),",
+						"     Contagem = count(Afiliado)) ~> AgregAux",
+						"AgregAux sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['Afiliados.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          Afiliado",
+						"     ),",
+						"     partitionBy('hash', 1)) ~> AfiliadoSilver"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Bronze_VendasHotmart_Entrada')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_Afiliados_Destino')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Ext_Cursos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Bronze_Cursos_Entrada",
+								"type": "DatasetReference"
+							},
+							"name": "CodProdutos"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_Cursos_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "Cursos"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          Cod as string,",
+						"          {Nome Novo} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> CodProdutos",
+						"CodProdutos sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Afiliado as string",
+						"     ),",
+						"     partitionFileNames:['Cursos.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> Cursos"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Bronze_Cursos_Entrada')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_Cursos_Destino')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Ext_MacroRegioes')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Bronze_MacroRegioes_Entrada",
+								"type": "DatasetReference"
+							},
+							"name": "MacroRegioes"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_MacroRegioes_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "MacroRegiaoSilver"
+						}
+					],
+					"transformations": [
+						{
+							"name": "dddcidadeestado"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "ColunasSeparadas"
+						},
+						{
+							"name": "SelecionaColunas"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Column_1 as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> MacroRegioes",
+						"MacroRegioes derive(dddcidadeestado = substring(Column_1, 4, 100)) ~> dddcidadeestado",
+						"dddcidadeestado derive(splitdddcidadeestado = split(dddcidadeestado, '–')) ~> derivedColumn1",
+						"derivedColumn1 derive(ddd = trim(splitdddcidadeestado[1]),",
+						"          cidade = left(trim(splitdddcidadeestado[2]), length(trim(splitdddcidadeestado[2]))-1),",
+						"          estado = trim(splitdddcidadeestado[3])) ~> ColunasSeparadas",
+						"ColunasSeparadas select(mapColumn(",
+						"          ddd,",
+						"          cidade,",
+						"          estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelecionaColunas",
+						"SelecionaColunas sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Afiliado as string",
+						"     ),",
+						"     partitionFileNames:['regioes.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> MacroRegiaoSilver"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Bronze_MacroRegioes_Entrada')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_MacroRegioes_Destino')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Ext_Produtor')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Bronze_VendasHotmart_Entrada",
+								"type": "DatasetReference"
+							},
+							"name": "Vendas"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_Produtor_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "Produtor"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AgregaProdutor"
+						},
+						{
+							"name": "SelecionaProdutor"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Produto as string,",
+						"          Afiliado as string,",
+						"          {Nome do Produtor} as string,",
+						"          {Documento do Produtor} as string,",
+						"          {Meio de Pagamento} as string,",
+						"          {Preço do Produto} as string,",
+						"          {Preço da Oferta} as string,",
+						"          {Tipo de Pagamento} as string,",
+						"          {Tipo pagamento oferta} as string,",
+						"          Moeda as string,",
+						"          {Número da Parcela} as string,",
+						"          {Recorrência} as string,",
+						"          {Data de Venda} as string,",
+						"          {Data de Confirmação} as string,",
+						"          Status as string,",
+						"          DDD as string,",
+						"          Cidade as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Vendas",
+						"Vendas aggregate(groupBy({Nome do Produtor}),",
+						"     Contagem = count({Nome do Produtor})) ~> AgregaProdutor",
+						"AgregaProdutor select(mapColumn(",
+						"          {Nome do Produtor}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelecionaProdutor",
+						"SelecionaProdutor sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Afiliado as string",
+						"     ),",
+						"     partitionFileNames:['produtor.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> Produtor"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Bronze_VendasHotmart_Entrada')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_Produtor_Destino')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Ext_Status')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Bronze_VendasHotmart_Entrada",
+								"type": "DatasetReference"
+							},
+							"name": "Vendas"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_Status_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "Status"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AgregaStatus"
+						},
+						{
+							"name": "SelecionaStatus"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Produto as string,",
+						"          Afiliado as string,",
+						"          {Nome do Produtor} as string,",
+						"          {Documento do Produtor} as string,",
+						"          {Meio de Pagamento} as string,",
+						"          {Preço do Produto} as string,",
+						"          {Preço da Oferta} as string,",
+						"          {Tipo de Pagamento} as string,",
+						"          {Tipo pagamento oferta} as string,",
+						"          Moeda as string,",
+						"          {Número da Parcela} as string,",
+						"          {Recorrência} as string,",
+						"          {Data de Venda} as string,",
+						"          {Data de Confirmação} as string,",
+						"          Status as string,",
+						"          DDD as string,",
+						"          Cidade as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Vendas",
+						"Vendas aggregate(groupBy(Status),",
+						"     Contagem = count(Status)) ~> AgregaStatus",
+						"AgregaStatus select(mapColumn(",
+						"          Status",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelecionaStatus",
+						"SelecionaStatus sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Afiliado as string",
+						"     ),",
+						"     partitionFileNames:['Status.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> Status"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Bronze_VendasHotmart_Entrada')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_Status_Destino')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Ext_TipodePagamento')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Bronze_VendasHotmart_Entrada",
+								"type": "DatasetReference"
+							},
+							"name": "Vendas"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_tipodePagamento_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "TipodePagamentoSilver"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AgregAux"
+						},
+						{
+							"name": "SelecionarColuna"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Produto as string,",
+						"          Afiliado as string,",
+						"          {Nome do Produtor} as string,",
+						"          {Documento do Produtor} as string,",
+						"          {Meio de Pagamento} as string,",
+						"          {Preço do Produto} as string,",
+						"          {Preço da Oferta} as string,",
+						"          {Tipo de Pagamento} as string,",
+						"          {Tipo pagamento oferta} as string,",
+						"          Moeda as string,",
+						"          {Número da Parcela} as string,",
+						"          {Recorrência} as string,",
+						"          {Data de Venda} as string,",
+						"          {Data de Confirmação} as string,",
+						"          Status as string,",
+						"          DDD as string,",
+						"          Cidade as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Vendas",
+						"Vendas aggregate(groupBy({Tipo de Pagamento}),",
+						"     Contagem = count({Tipo de Pagamento})) ~> AgregAux",
+						"AgregAux select(mapColumn(",
+						"          {Tipo de Pagamento}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelecionarColuna",
+						"SelecionarColuna sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Afiliado as string",
+						"     ),",
+						"     partitionFileNames:['Tipo_de_Pagamento.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> TipodePagamentoSilver"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Bronze_VendasHotmart_Entrada')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_tipodePagamento_Destino')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Ext_VendasHotmart')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Bronze_VendasHotmart_Entrada",
+								"type": "DatasetReference"
+							},
+							"name": "VendasHotMartEntrada"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_VendasHotMart_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "VendasHotMartDestino"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          Produto as string,",
+						"          Afiliado as string,",
+						"          {Nome do Produtor} as string,",
+						"          {Documento do Produtor} as string,",
+						"          {Meio de Pagamento} as string,",
+						"          {Preço do Produto} as string,",
+						"          {Preço da Oferta} as string,",
+						"          {Tipo de Pagamento} as string,",
+						"          {Tipo pagamento oferta} as string,",
+						"          Moeda as string,",
+						"          {Número da Parcela} as string,",
+						"          {Recorrência} as string,",
+						"          {Data de Venda} as string,",
+						"          {Data de Confirmação} as string,",
+						"          Status as string,",
+						"          DDD as string,",
+						"          Cidade as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> VendasHotMartEntrada",
+						"VendasHotMartEntrada sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Afiliado as string",
+						"     ),",
+						"     partitionFileNames:['vendas.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> VendasHotMartDestino"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Bronze_VendasHotmart_Entrada')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_VendasHotMart_Destino')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ppl_ext_Afiliados')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "dfExtAfiliados",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Ext_Afliados",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"Vendas": {},
+									"AfiliadoSilver": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-12-04T22:42:45Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Ext_Afliados')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ppl_ext_Cursos')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "df_ext_cursos",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Ext_Cursos",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"CodProdutos": {},
+									"Cursos": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "1 - Extraction"
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-12-03T18:18:39Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Ext_Cursos')]"
+			]
+		}
+	]
+}
