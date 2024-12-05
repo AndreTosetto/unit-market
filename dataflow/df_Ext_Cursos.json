@@ -1,0 +1,51 @@
+{
+	"name": "df_Ext_Cursos",
+	"properties": {
+		"folder": {
+			"name": "1 - Extraction"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_Ext_Bronze_Cursos_Entrada",
+						"type": "DatasetReference"
+					},
+					"name": "CodProdutos"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_Ext_Silver_Cursos_Destino",
+						"type": "DatasetReference"
+					},
+					"name": "Cursos"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          Cod as string,",
+				"          {Nome Novo} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CodProdutos",
+				"CodProdutos sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Afiliado as string",
+				"     ),",
+				"     partitionFileNames:['Cursos.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> Cursos"
+			]
+		}
+	}
+}

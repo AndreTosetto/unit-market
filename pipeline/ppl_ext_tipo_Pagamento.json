@@ -1,0 +1,37 @@
+{
+	"name": "ppl_ext_tipo_Pagamento",
+	"properties": {
+		"activities": [
+			{
+				"name": "df_ext_tipo_pagamento",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_Ext_TipodePagamento",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "1 - Extraction"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-12-03T17:57:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

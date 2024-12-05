@@ -1,0 +1,28 @@
+{
+	"name": "ds_Ext_Bronze_MacroRegioes_Entrada",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalakemktStart",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "1 - Extraction"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Planilha1",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Macro Regioes.xlsx",
+				"fileSystem": "bronze"
+			}
+		},
+		"schema": [
+			{
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

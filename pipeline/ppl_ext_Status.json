@@ -1,0 +1,37 @@
+{
+	"name": "ppl_ext_Status",
+	"properties": {
+		"activities": [
+			{
+				"name": "df_ext_status",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_Ext_Status",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "1 - Extraction"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-12-03T18:18:39Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

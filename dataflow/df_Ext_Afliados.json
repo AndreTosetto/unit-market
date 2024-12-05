@@ -1,0 +1,80 @@
+{
+	"name": "df_Ext_Afliados",
+	"properties": {
+		"folder": {
+			"name": "1 - Extraction"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_Ext_Bronze_VendasHotmart_Entrada",
+						"type": "DatasetReference"
+					},
+					"name": "Vendas"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_Ext_Silver_Afiliados_Destino",
+						"type": "DatasetReference"
+					},
+					"name": "AfiliadoSilver"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelecionarColuna"
+				},
+				{
+					"name": "AgregAux"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Produto as string,",
+				"          Afiliado as string,",
+				"          {Nome do Produtor} as string,",
+				"          {Documento do Produtor} as string,",
+				"          {Meio de Pagamento} as string,",
+				"          {Preço do Produto} as string,",
+				"          {Preço da Oferta} as string,",
+				"          {Tipo de Pagamento} as string,",
+				"          {Tipo pagamento oferta} as string,",
+				"          Moeda as string,",
+				"          {Número da Parcela} as string,",
+				"          {Recorrência} as string,",
+				"          {Data de Venda} as string,",
+				"          {Data de Confirmação} as string,",
+				"          Status as string,",
+				"          DDD as string,",
+				"          Cidade as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Vendas",
+				"Vendas select(mapColumn(",
+				"          Afiliado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelecionarColuna",
+				"SelecionarColuna aggregate(groupBy(Afiliado),",
+				"     Contagem = count(Afiliado)) ~> AgregAux",
+				"AgregAux sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Afiliados.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          Afiliado",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> AfiliadoSilver"
+			]
+		}
+	}
+}
