@@ -1611,6 +1611,82 @@
 				"[concat(variables('factoryId'), '/datasets/ds_Ext_Bronze_VendasHotmart_Entrada')]",
 				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_VendasHotMart_Destino')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Src_Afiliados')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "2 - Stage"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_Afiliados_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "DLSilver"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_tbl_src_Afiliados",
+								"type": "DatasetReference"
+							},
+							"name": "srcDestino"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          Afiliado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> DLSilver",
+						"DLSilver sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Id as integer,",
+						"          Nome as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          Nome = Afiliado",
+						"     )) ~> srcDestino"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_Afiliados_Destino')]",
+				"[concat(variables('factoryId'), '/datasets/ds_tbl_src_Afiliados')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ppl_src')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "2 - Stage"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
 		}
 	]
 }
