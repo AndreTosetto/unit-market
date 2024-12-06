@@ -1,0 +1,52 @@
+{
+	"name": "df_Stg_Cursos",
+	"properties": {
+		"folder": {
+			"name": "2 - Stage"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_tbl_src_Cursos",
+						"type": "DatasetReference"
+					},
+					"name": "Source"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_tbl_stg_Cursos",
+						"type": "DatasetReference"
+					},
+					"name": "Stg"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          Id as integer,",
+				"          BK as string,",
+				"          Nome as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> Source",
+				"source(output(",
+				"          Id as integer,",
+				"          BK as integer,",
+				"          CodProdOrigine as string,",
+				"          Nome as string,",
+				"          DataInicio as date,",
+				"          DataFim as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> Stg"
+			]
+		}
+	}
+}
