@@ -48,7 +48,8 @@
 				"     input(",
 				"          SK as integer,",
 				"          BK as string,",
-				"          Nome as string",
+				"          Nome as string,",
+				"          CodProdOriginal as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -60,7 +61,8 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
-				"          BK = CodProdOrigine,",
+				"          BK,",
+				"          CodProdOriginal = CodProdOrigine,",
 				"          Nome",
 				"     )) ~> Presentation"
 			]
