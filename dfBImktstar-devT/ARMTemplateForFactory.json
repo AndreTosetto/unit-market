@@ -1408,6 +1408,248 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_tbl_pre_Afiliados')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "srv_bi_market_star",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "3 - Presentation"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Nome",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "pre",
+					"table": "dAfiliados"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/srv_bi_market_star')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_tbl_pre_Cursos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "srv_bi_market_star",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "3 - Presentation"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BK",
+						"type": "varchar"
+					},
+					{
+						"name": "Nome",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "pre",
+					"table": "dCursos"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/srv_bi_market_star')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_tbl_pre_Produtor')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "srv_bi_market_star",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "3 - Presentation"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Nome",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "pre",
+					"table": "dProdutor"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/srv_bi_market_star')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_tbl_pre_Regioes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "srv_bi_market_star",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "3 - Presentation"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DDD",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Cidade",
+						"type": "varchar"
+					},
+					{
+						"name": "Estado",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "pre",
+					"table": "dRegioes"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/srv_bi_market_star')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_tbl_pre_Status')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "srv_bi_market_star",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "3 - Presentation"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Nome",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "pre",
+					"table": "dStatus"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/srv_bi_market_star')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_tbl_pre_TipoPagamento')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "srv_bi_market_star",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "3 - Presentation"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BK",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Nome",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "pre",
+					"table": "dTipoPagamento"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/srv_bi_market_star')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_tbl_src_Afiliados')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
