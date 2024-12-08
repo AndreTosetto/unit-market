@@ -13,6 +13,42 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_tbl_src_Cursos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "srv_bi_market_star",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "2 - Stage"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BK",
+						"type": "varchar"
+					},
+					{
+						"name": "Nome",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "src",
+					"table": "Cursos"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_tbl_src_Produtor')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1113,65 +1149,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_tbl_stg_Cursos')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_Src_Afiliados')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "2 - Stage"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_Ext_Silver_Afiliados_Destino",
-								"type": "DatasetReference"
-							},
-							"name": "DLSilver"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_tbl_src_Afiliados",
-								"type": "DatasetReference"
-							},
-							"name": "srcDestino"
-						}
-					],
-					"transformations": [],
-					"scriptLines": [
-						"source(output(",
-						"          Afiliado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> DLSilver",
-						"DLSilver sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          Id as integer,",
-						"          Nome as string",
-						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     truncate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          Nome = Afiliado",
-						"     )) ~> srcDestino"
-					]
-				}
-			},
-			"dependsOn": []
 		}
 	]
 }
