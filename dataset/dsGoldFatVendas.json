@@ -1,0 +1,26 @@
+{
+	"name": "dsGoldFatVendas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalakemktStart",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "4 - Fact"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "fVendas.csv",
+				"fileSystem": "gold"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
