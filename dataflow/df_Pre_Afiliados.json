@@ -1,0 +1,68 @@
+{
+	"name": "df_Pre_Afiliados",
+	"properties": {
+		"folder": {
+			"name": "3 - Presentation"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_tbl_stg_Afiliados",
+						"type": "DatasetReference"
+					},
+					"name": "source"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_tbl_pre_Afiliados",
+						"type": "DatasetReference"
+					},
+					"name": "presentation"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FiltraAtivos"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Id as integer,",
+				"          BK as integer,",
+				"          Nome as string,",
+				"          DataInicio as date,",
+				"          DataFim as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source",
+				"source filter(isNull(DataFim)) ~> FiltraAtivos",
+				"FiltraAtivos sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SK as integer,",
+				"          BK as integer,",
+				"          Nome as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          BK,",
+				"          Nome",
+				"     )) ~> presentation"
+			]
+		}
+	}
+}
