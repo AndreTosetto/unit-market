@@ -77,37 +77,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dsGoldFatVendas')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "datalakemktStart",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "4 - Fact"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "fVendas.csv",
-						"fileSystem": "gold"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ds_Ext_Bronze_Cursos_Entrada')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -523,6 +492,37 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_Gold_Fat_Vendas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "4 - Fact"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "fVendas.csv",
+						"fileSystem": "gold"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_tbl_pre_Afiliados')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -769,7 +769,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_tbl_src_Afiliados')]",
+			"name": "[concat(parameters('factoryName'), '/ds_tbl_pre_vendas')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -778,7 +778,7 @@
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
-					"name": "2 - Stage"
+					"name": "4 - Fact"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -789,13 +789,60 @@
 						"precision": 10
 					},
 					{
-						"name": "Nome",
-						"type": "varchar"
+						"name": "IdProdutor",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IdCurso",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IdAfiliado",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IdTipoPagamento",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IdStatus",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IdRegioes",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IdTempo",
+						"type": "char"
+					},
+					{
+						"name": "ValorProduto",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "ValorOferta",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "QtdParcelas",
+						"type": "int",
+						"precision": 10
 					}
 				],
 				"typeProperties": {
-					"schema": "src",
-					"table": "Afiliados"
+					"schema": "pre",
+					"table": "fVendas"
 				}
 			},
 			"dependsOn": [
