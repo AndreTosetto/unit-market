@@ -77,6 +77,37 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dsGoldFatVendas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakemktStart",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "4 - Fact"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "fVendas.csv",
+						"fileSystem": "gold"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakemktStart')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_Ext_Bronze_Cursos_Entrada')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -765,44 +796,6 @@
 				"typeProperties": {
 					"schema": "src",
 					"table": "Afiliados"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/srv_bi_market_star')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_tbl_src_Cursos')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "srv_bi_market_star",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "2 - Stage"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "BK",
-						"type": "varchar"
-					},
-					{
-						"name": "Nome",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "src",
-					"table": "Cursos"
 				}
 			},
 			"dependsOn": [
