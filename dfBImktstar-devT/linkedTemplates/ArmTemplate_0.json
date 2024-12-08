@@ -557,6 +557,10 @@
 					{
 						"name": "Nome",
 						"type": "varchar"
+					},
+					{
+						"name": "CodProdOriginal",
+						"type": "varchar"
 					}
 				],
 				"typeProperties": {
