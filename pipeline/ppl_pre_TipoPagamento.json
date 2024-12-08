@@ -1,0 +1,35 @@
+{
+	"name": "ppl_pre_TipoPagamento",
+	"properties": {
+		"activities": [
+			{
+				"name": "df_Pre_TipoPagamento",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_Pre_TipoPagamento",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "3 - Presentation"
+		},
+		"annotations": []
+	}
+}
