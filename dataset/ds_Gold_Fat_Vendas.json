@@ -1,5 +1,5 @@
 {
-	"name": "dsGoldFatVendas",
+	"name": "ds_Gold_Fat_Vendas",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "datalakemktStart",
