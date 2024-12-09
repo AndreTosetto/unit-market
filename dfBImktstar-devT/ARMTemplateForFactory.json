@@ -975,6 +975,61 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ppl_src_Vendas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "df_Src_Vendas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Src_Vendas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"Silver": {},
+									"srcAfiliados": {},
+									"srcCursos": {},
+									"srcProdutor": {},
+									"srcRegioes": {},
+									"srcStatus": {},
+									"srcTipoPagemento": {},
+									"GoldDestino": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "4 - Fact"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Src_Vendas')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ppl_stg_Afiliados')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -3997,6 +4052,310 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_tipodePagamento_Destino')]",
 				"[concat(variables('factoryId'), '/datasets/ds_tbl_src_TipoPagamento')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Src_Vendas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "4 - Fact"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_Ext_Silver_VendasHotMart_Destino",
+								"type": "DatasetReference"
+							},
+							"name": "Silver"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_tbl_src_Afiliados",
+								"type": "DatasetReference"
+							},
+							"name": "srcAfiliados"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_tbl_src_Cursos",
+								"type": "DatasetReference"
+							},
+							"name": "srcCursos"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_tbl_src_Produtor",
+								"type": "DatasetReference"
+							},
+							"name": "srcProdutor"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_tbl_src_Regioes",
+								"type": "DatasetReference"
+							},
+							"name": "srcRegioes"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_tbl_src_Status",
+								"type": "DatasetReference"
+							},
+							"name": "srcStatus"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_tbl_src_TipoPagamento",
+								"type": "DatasetReference"
+							},
+							"name": "srcTipoPagemento"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_Gold_Fat_Vendas",
+								"type": "DatasetReference"
+							},
+							"name": "GoldDestino"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectVendas"
+						},
+						{
+							"name": "SelectAfiliados"
+						},
+						{
+							"name": "JoinAfiliados"
+						},
+						{
+							"name": "SelectCursos"
+						},
+						{
+							"name": "SelectProdutor"
+						},
+						{
+							"name": "JoinCursos"
+						},
+						{
+							"name": "SelectRegioes"
+						},
+						{
+							"name": "JoinProdutor"
+						},
+						{
+							"name": "SelectStatus"
+						},
+						{
+							"name": "SelectTipoPagamento"
+						},
+						{
+							"name": "JoinRegioes"
+						},
+						{
+							"name": "JoinStatus"
+						},
+						{
+							"name": "JoinTipoPagamento"
+						},
+						{
+							"name": "SelectFinal"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Produto as string,",
+						"          Afiliado as string,",
+						"          {Nome do Produtor} as string,",
+						"          {Documento do Produtor} as long,",
+						"          {Meio de Pagamento} as string,",
+						"          {Preço do Produto} as double,",
+						"          {Preço da Oferta} as double,",
+						"          {Tipo de Pagamento} as string,",
+						"          {Tipo pagamento oferta} as string,",
+						"          Moeda as string,",
+						"          {Número da Parcela} as short,",
+						"          {Recorrência} as short,",
+						"          {Data de Venda} as string,",
+						"          {Data de Confirmação} as string,",
+						"          Status as string,",
+						"          DDD as string,",
+						"          Cidade as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Silver",
+						"source(output(",
+						"          Id as integer,",
+						"          Nome as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> srcAfiliados",
+						"source(output(",
+						"          Id as integer,",
+						"          BK as string,",
+						"          Nome as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> srcCursos",
+						"source(output(",
+						"          Id as integer,",
+						"          Nome as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> srcProdutor",
+						"source(output(",
+						"          Id as integer,",
+						"          DDD as integer,",
+						"          Cidade as string,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> srcRegioes",
+						"source(output(",
+						"          Id as integer,",
+						"          Nome as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> srcStatus",
+						"source(output(",
+						"          Id as integer,",
+						"          Nome as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> srcTipoPagemento",
+						"Silver select(mapColumn(",
+						"          Vendas_Cursos = Produto,",
+						"          Vendas_Afiliado = Afiliado,",
+						"          {Vendas_Nome do Produtor} = {Nome do Produtor},",
+						"          {Vendas_Preço do Produto} = {Preço do Produto},",
+						"          {Vendas_Tipo de Pagamento} = {Tipo de Pagamento},",
+						"          {Vendas_Número da Parcela} = {Número da Parcela},",
+						"          {Vendas_Data de Venda} = {Data de Venda},",
+						"          Vendas_Status = Status,",
+						"          Vendas_DDD = DDD",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVendas",
+						"srcAfiliados select(mapColumn(",
+						"          Afiliados_Id = Id,",
+						"          Afiliados_Nome = Nome",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectAfiliados",
+						"SelectVendas, SelectAfiliados join(Vendas_Afiliado == Afiliados_Nome,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> JoinAfiliados",
+						"srcCursos select(mapColumn(",
+						"          Cursos_Id = Id,",
+						"          Cursos_BK = BK,",
+						"          Cursos_Nome = Nome",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectCursos",
+						"srcProdutor select(mapColumn(",
+						"          Produtor_Id = Id,",
+						"          Produtor_Nome = Nome",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectProdutor",
+						"JoinAfiliados, SelectCursos join(Vendas_Cursos == Cursos_Nome,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> JoinCursos",
+						"srcRegioes select(mapColumn(",
+						"          Regioes_Id = Id,",
+						"          Regioes_DDD = DDD,",
+						"          Regioes_Cidade = Cidade,",
+						"          Regioes_Estado = Estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRegioes",
+						"JoinCursos, SelectProdutor join({Vendas_Nome do Produtor} == Produtor_Nome,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> JoinProdutor",
+						"srcStatus select(mapColumn(",
+						"          Status_Id = Id,",
+						"          Status_Nome = Nome",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectStatus",
+						"srcTipoPagemento select(mapColumn(",
+						"          TipoPagamento_Id = Id,",
+						"          TipoPagamento_Nome = Nome",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectTipoPagamento",
+						"JoinProdutor, SelectRegioes join(Vendas_DDD == toString(Regioes_DDD),",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> JoinRegioes",
+						"JoinRegioes, SelectStatus join(Vendas_Status == Status_Nome,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> JoinStatus",
+						"JoinStatus, SelectTipoPagamento join({Vendas_Tipo de Pagamento} == TipoPagamento_Nome,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> JoinTipoPagamento",
+						"JoinTipoPagamento select(mapColumn(",
+						"          {Vendas_Preço do Produto},",
+						"          {Vendas_Número da Parcela},",
+						"          {Vendas_Data de Venda},",
+						"          Afiliados_Id,",
+						"          Cursos_Id,",
+						"          Produtor_Id,",
+						"          Regioes_Id,",
+						"          Status_Id,",
+						"          TipoPagamento_Id",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectFinal",
+						"SelectFinal sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> GoldDestino"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_Ext_Silver_VendasHotMart_Destino')]",
+				"[concat(variables('factoryId'), '/datasets/ds_tbl_src_Afiliados')]",
+				"[concat(variables('factoryId'), '/datasets/ds_tbl_src_Cursos')]",
+				"[concat(variables('factoryId'), '/datasets/ds_tbl_src_Produtor')]",
+				"[concat(variables('factoryId'), '/datasets/ds_tbl_src_Regioes')]",
+				"[concat(variables('factoryId'), '/datasets/ds_tbl_src_Status')]",
+				"[concat(variables('factoryId'), '/datasets/ds_tbl_src_TipoPagamento')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Gold_Fat_Vendas')]"
 			]
 		},
 		{
