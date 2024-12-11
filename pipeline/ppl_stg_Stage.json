@@ -1,0 +1,142 @@
+{
+	"name": "ppl_stg_Stage",
+	"properties": {
+		"activities": [
+			{
+				"name": "pplAfiliados",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_stg_Afiliados",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "pplstgCursos",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "pplAfiliados",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_stg_Cursos",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "pplstgProdutor",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "pplstgCursos",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_stg_Produtor",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "pplstgRegiao",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "pplstgProdutor",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_stg_Regiao",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "pplstgStatus",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "pplstgRegiao",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_stg_Status",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "pplstgTipoPagamento",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "pplstgStatus",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_stg_TipoPagamento",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "5 - Orchestration"
+		},
+		"annotations": []
+	}
+}
