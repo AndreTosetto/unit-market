@@ -37,6 +37,167 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pplCargaCompleta')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "pplExtraction",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_Extraction",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplsrcStage",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplExtraction",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_Stage",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplVendasGold",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplsrcStage",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_VendaGold",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplstgStage",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplVendasGold",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_stg_Stage",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplstgPresentation",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplstgStage",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_stg_Presentation",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplPreFatoVendas",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplstgPresentation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_pre_FatoVendas",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Orchestration/Pipeline Carga Completa"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ppl_Extraction')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_Stage')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_VendaGold')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_stg_Stage')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_stg_Presentation')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_pre_FatoVendas')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ppl_Extraction')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -208,7 +369,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"folder": {
-					"name": "5 - Orchestration"
+					"name": "Orchestration/Pipeline por Camada"
 				},
 				"annotations": []
 			},
@@ -698,7 +859,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"folder": {
-					"name": "5 - Orchestration"
+					"name": "Orchestration/Pipeline por Camada"
 				},
 				"annotations": []
 			},
@@ -1295,7 +1456,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"folder": {
-					"name": "5 - Orchestration"
+					"name": "Orchestration/Pipeline por Camada"
 				},
 				"annotations": []
 			},
@@ -1434,7 +1595,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"folder": {
-					"name": "5 - Orchestration"
+					"name": "Orchestration/Pipeline por Camada"
 				},
 				"annotations": []
 			},
@@ -1749,7 +1910,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"folder": {
-					"name": "5 - Orchestration"
+					"name": "Orchestration/Pipeline por Camada"
 				},
 				"annotations": []
 			},
@@ -2014,7 +2175,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"folder": {
-					"name": "5 - Orchestration"
+					"name": "Orchestration/Pipeline por Camada"
 				},
 				"annotations": []
 			},
