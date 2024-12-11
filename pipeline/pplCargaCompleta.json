@@ -1,9 +1,9 @@
 {
-	"name": "ppl_src_VendaGold",
+	"name": "pplCargaCompleta",
 	"properties": {
 		"activities": [
 			{
-				"name": "PplSourceVendas",
+				"name": "pplExtraction",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"policy": {
@@ -12,7 +12,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "ppl_src_Vendas",
+						"referenceName": "ppl_Extraction",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
@@ -20,7 +20,7 @@
 			}
 		],
 		"folder": {
-			"name": "Orchestration/Pipeline por Camada"
+			"name": "Orchestration/Pipeline Carga Completa"
 		},
 		"annotations": []
 	}
