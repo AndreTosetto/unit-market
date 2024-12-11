@@ -677,6 +677,167 @@
 				"annotations": []
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ppl_stg_Stage')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "pplAfiliados",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_stg_Afiliados",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplstgCursos",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplAfiliados",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_stg_Cursos",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplstgProdutor",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplstgCursos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_stg_Produtor",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplstgRegiao",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplstgProdutor",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_stg_Regiao",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplstgStatus",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplstgRegiao",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_stg_Status",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplstgTipoPagamento",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplstgStatus",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_stg_TipoPagamento",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "5 - Orchestration"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ppl_stg_Afiliados')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_stg_Cursos')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_stg_Produtor')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_stg_Regiao')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_stg_Status')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_stg_TipoPagamento')]"
+			]
 		}
 	]
 }
