@@ -1,0 +1,209 @@
+CREATE SCHEMA stg;
+GO
+CREATE SCHEMA pre;
+GO
+CREATE SCHEMA src;
+GO
+
+/** Criaçao das tabelas Source **/
+
+CREATE TABLE [src].[Afiliados]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [Nome] VARCHAR(100) NOT NULL
+)
+go
+
+CREATE TABLE [src].[Status]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [Nome] VARCHAR(100) NOT NULL
+    
+)
+go
+
+
+CREATE TABLE [src].[Regioes]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [DDD] INT NOT NULL,
+    [Cidade] VARCHAR(50) NOT NULL,
+    [Estado] VARCHAR(50) NOT NULL,
+    
+)
+go
+
+CREATE TABLE [src].[TipoPagamento]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [Nome] VARCHAR(100) NOT NULL
+    
+)
+go
+
+CREATE TABLE [src].[Cursos]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] VARCHAR(100) NOT NULL, 
+    [Nome] VARCHAR(100) NOT NULL,
+        
+)
+go
+
+CREATE TABLE [src].[Produtor]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [Nome] VARCHAR(100) NOT NULL,
+      
+)
+go
+
+
+/** Criaçao das tabelas Stages **/
+
+CREATE TABLE [stg].[Afiliados]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL, 
+    [Nome] VARCHAR(100) NOT NULL,
+    [DataInicio] DATE NOT NULL, 
+    [DataFim] DATE NULL
+)
+go
+
+CREATE TABLE [stg].[Status]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL, 
+    [Nome] VARCHAR(100) NOT NULL,
+    [DataInicio] DATE NOT NULL, 
+    [DataFim] DATE NULL
+    
+)
+go
+
+CREATE TABLE [stg].[TipoPagamento]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL,
+    [Nome] VARCHAR(100) NOT NULL,
+    [DataInicio] DATE NOT NULL, 
+    [DataFim] DATE NULL
+    
+)
+go
+
+CREATE TABLE [stg].[Cursos]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY ,
+    [BK] INT NOT NULL, 
+    [CodProdOrigine] VARCHAR(100) NOT NULL,
+    [Nome] VARCHAR(100) NOT NULL,
+    [DataInicio] DATE NOT NULL, 
+    [DataFim] DATE NULL
+    
+)
+go
+
+CREATE TABLE [stg].[Produtor]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL,
+    [Nome] VARCHAR(100) NOT NULL,
+    [DataInicio] DATE NOT NULL, 
+    [DataFim] DATE NULL
+      
+)
+go
+
+
+
+CREATE TABLE [stg].[Regioes]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL,
+    [DDD] INT NOT NULL,
+    [Cidade] VARCHAR(50) NOT NULL,
+    [Estado] VARCHAR(50) NOT NULL,
+    [DataInicio] DATE NOT NULL, 
+    [DataFim] DATE NULL
+    
+)
+go
+
+/** Criaçao das tabelas Presentation **/
+
+CREATE TABLE [pre].[dAfiliados]
+(
+    [SK] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL, 
+    [Nome] VARCHAR(100) NOT NULL
+)
+go
+
+CREATE TABLE [pre].[dStatus]
+(
+    [SK] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL, 
+    [Nome] VARCHAR(100) NOT NULL
+    
+)
+go
+
+CREATE TABLE [pre].[dTipoPagamento]
+(
+    [SK] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL, 
+    [Nome] VARCHAR(100) NOT NULL
+   
+      
+)
+go
+
+CREATE TABLE [pre].[dCursos]
+(
+    [SK] INT IDENTITY(1,1) NOT NULL PRIMARY KEY  , 
+    [BK] VARCHAR(100) NOT NULL,
+    [CodProdOrigine] VARCHAR(100) NOT NULL, 
+    [Nome] VARCHAR(100) NOT NULL
+        
+)
+go
+
+CREATE TABLE [pre].[dProdutor]
+(
+    [SK] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [BK] INT NOT NULL, 
+    [Nome] VARCHAR(100) NOT NULL
+      
+)
+go
+
+CREATE TABLE [pre].[dRegioes]
+(
+    [SK] INT IDENTITY(1,1) NOT NULL PRIMARY KEY ,
+    [BK] INT NOT NULL, 
+    [DDD] INT NOT NULL,
+    [Cidade] VARCHAR(50) NOT NULL,
+    [Estado] VARCHAR(50) NOT NULL
+    
+)
+go
+
+CREATE TABLE [pre].[fVendas]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY , 
+    [IdProdutor] INT NOT NULL,
+    [IdCurso] INT NOT NULL,    
+    [IdAfiliado] INT ,
+    [IdTipoPagamento] INT NOT NULL,
+    [IdStatus] INT NOT NULL,
+    [IdRegioes] INT NULL,
+    [ValorProduto] MONEY NOT NULL,
+    [Data de Venda] DATE NOT NULL
+    [QtdParcelas] INT NOT NULL,
+    
+)
+go
+
+
