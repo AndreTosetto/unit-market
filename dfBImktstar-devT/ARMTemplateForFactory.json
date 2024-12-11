@@ -223,167 +223,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ppl_Src_Stage')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "pplsrcAfiliado",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"policy": {
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "ppl_src_Afiliados",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "pplsrcCursos",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pplsrcAfiliado",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "ppl_src_Cursos",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "pplsrcProdutor",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pplsrcCursos",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "ppl_src_Produtor",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "pplsrcRegiao",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pplsrcProdutor",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "ppl_src_Regiao",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "pplsrcStatus",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pplsrcRegiao",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "ppl_src_Status",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "pplsrcTipoPagamento",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pplsrcStatus",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "ppl_src_TipoPagamento",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"folder": {
-					"name": "5 - Orchestration"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/ppl_src_Afiliados')]",
-				"[concat(variables('factoryId'), '/pipelines/ppl_src_Cursos')]",
-				"[concat(variables('factoryId'), '/pipelines/ppl_src_Produtor')]",
-				"[concat(variables('factoryId'), '/pipelines/ppl_src_Regiao')]",
-				"[concat(variables('factoryId'), '/pipelines/ppl_src_Status')]",
-				"[concat(variables('factoryId'), '/pipelines/ppl_src_TipoPagamento')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ppl_ext_Afiliados')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1273,6 +1112,167 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ppl_src_Stage')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "pplsrcAfiliado",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_Afiliados",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplsrcCursos",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplsrcAfiliado",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_Cursos",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplsrcProdutor",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplsrcCursos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_Produtor",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplsrcRegiao",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplsrcProdutor",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_Regiao",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplsrcStatus",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplsrcRegiao",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_Status",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "pplsrcTipoPagamento",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pplsrcStatus",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_TipoPagamento",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "5 - Orchestration"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_Afiliados')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_Cursos')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_Produtor')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_Regiao')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_Status')]",
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_TipoPagamento')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ppl_src_Status')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1368,6 +1368,42 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/df_Src_TipoPagamento')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ppl_src_VendaGold')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "PplSourceVendas",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "ppl_src_Vendas",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "5 - Orchestration"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ppl_src_Vendas')]"
 			]
 		},
 		{
