@@ -1,0 +1,27 @@
+{
+	"name": "ppl_pre_FatoVendas",
+	"properties": {
+		"activities": [
+			{
+				"name": "pplPreVendas",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_pre_Vendas",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "5 - Orchestration"
+		},
+		"annotations": []
+	}
+}
